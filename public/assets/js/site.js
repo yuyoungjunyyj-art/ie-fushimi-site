@@ -86,17 +86,44 @@ function msg(el, key) {
     reveals.forEach((el) => io.observe(el));
   }
 
-  /* Films: no autoplay when reduced motion is requested — the poster stays */
-  document.querySelectorAll("video[data-autoplay]").forEach((video) => {
-    if (reduceMotion) {
-      video.removeAttribute("autoplay");
-      video.pause();
-      return;
-    }
+  /* Films: play only while on screen. No autoplay when reduced motion is
+     requested. Where the browser refuses (e.g. iOS Low Power Mode), the
+     poster stays and the next tap tries again. */
+  const films = document.querySelectorAll("video[data-autoplay]");
+  const onScreen = new Set();
+  const tryPlay = (video) => {
     video.muted = true;
     const play = video.play();
     if (play && play.catch) play.catch(() => {});
-  });
+  };
+  const playOnScreen = () => onScreen.forEach((video) => { if (video.paused) tryPlay(video); });
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    films.forEach((video) => {
+      if (reduceMotion) {
+        video.removeAttribute("autoplay");
+        video.pause();
+      } else {
+        tryPlay(video);
+      }
+    });
+  } else {
+    const filmObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          onScreen.add(entry.target);
+          tryPlay(entry.target);
+        } else {
+          onScreen.delete(entry.target);
+          entry.target.pause();
+        }
+      });
+    }, { threshold: 0.1 });
+    films.forEach((video) => filmObserver.observe(video));
+    document.addEventListener("touchend", playOnScreen, { passive: true });
+    document.addEventListener("click", playOnScreen);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) playOnScreen(); });
+    window.addEventListener("pageshow", playOnScreen);
+  }
 
   /* Map loads only when asked (no third-party requests before consent) */
   document.querySelectorAll("[data-map-src]").forEach((slot) => {

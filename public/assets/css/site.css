@@ -38,6 +38,10 @@ body {
 }
 img, video, svg { display: block; max-width: 100%; }
 img, video { height: auto; }
+/* Films are ambient: never show the browser's play button over a poster */
+video::-webkit-media-controls { display: none !important; }
+video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+video::-webkit-media-controls-overlay-play-button { display: none !important; }
 a { color: inherit; }
 p { margin: 0 0 1em; }
 h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.2; margin: 0 0 .6em; }

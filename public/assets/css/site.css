@@ -247,14 +247,6 @@ figcaption, .caption {
   .chapter--pair .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
 }
 
-.photo-to-come {
-  aspect-ratio: 2 / 3; width: 100%;
-  display: flex; align-items: flex-end; padding: 1.25rem;
-  border: 1px dashed rgba(33,26,23,.35); color: var(--moss);
-  font-family: var(--sans); font-size: .8rem; line-height: 1.5;
-}
-
-
 /* ---------- Signatures ---------- */
 .signatures-grid { display: grid; gap: clamp(48px, 6vw, 72px); }
 @media (min-width: 800px) { .signatures-grid { grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 48px); } }
@@ -367,8 +359,7 @@ figcaption, .caption {
 .cards { display: grid; gap: 2.5rem 1.5rem; }
 @media (min-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1000px) { .cards { grid-template-columns: repeat(3, 1fr); } }
-.card img, .card .photo-to-come { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
-.card .photo-to-come { aspect-ratio: 4 / 3; }
+.card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
 .card h3 { font-size: var(--step-1); margin: 1rem 0 .35rem; }
 .card p { font-family: var(--serif); line-height: 1.55; max-width: 34ch; }
 .status { display: inline-block; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; border: 1px solid currentColor; padding: .25rem .55rem; margin-top: .3rem; }
